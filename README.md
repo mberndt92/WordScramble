@@ -1,4 +1,5 @@
 # WordScramble
 Project 5 as part of #100DaysOfSwiftUI 
 
-![Screenshot 2023-03-15 at 9 35 03](https://user-images.githubusercontent.com/23187781/225173251-738be19f-a32b-487e-ac79-21e50f917cb8.png)
+
+![Screenshot 2023-03-16 at 7 56 56](https://user-images.githubusercontent.com/23187781/225461799-e3f15fc3-3e2e-4016-8496-61e6c51b2e32.png)
