@@ -23,6 +23,14 @@ struct ContentView: View {
     
     @FocusState private var focusedField: FocusedField?
     
+    private var score: Int {
+        let wordCount = usedWords.count
+        let characterCount = usedWords
+            .map({ $0.count })
+            .reduce(0, +)
+        return wordCount + characterCount
+    }
+    
     var body: some View {
         NavigationView {
             List {
@@ -50,6 +58,14 @@ struct ContentView: View {
             .onAppear {
                 focusedField = .enterWord
             }
+            .toolbar(content: {
+                ToolbarItem(placement: .navigationBarLeading, content: {
+                    Text("Score: \(score)")
+                })
+                ToolbarItem(placement: .navigationBarTrailing, content: {
+                    Button("New Game", action: startGame)
+                })
+            })
             .alert(errorTitle, isPresented: $showingError) {
                 Button("OK", role: .cancel) { }
             } message: {
@@ -62,6 +78,16 @@ struct ContentView: View {
         let answer = newWord
             .lowercased()
             .trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        guard answer != rootWord else {
+            wordError(title: "Reused word", message: "You can't just take the given word and make it look like your own")
+            return
+        }
+        
+        guard answer.count >= 3 else {
+            wordError(title: "Too  short", message: "You need at least three characters to build a word in this game")
+            return
+        }
         
         guard answer.count > 0 else {
             wordError(title: "Empty word", message: "That's just empty!")
@@ -121,6 +147,7 @@ struct ContentView: View {
     }
     
     private func startGame() {
+        usedWords = []
         if let startWordUrl = Bundle.main.url(forResource: "start", withExtension: "txt") {
             if let startWords = try? String(contentsOf: startWordUrl) {
                 let allWords = startWords.components(separatedBy: "\n")
